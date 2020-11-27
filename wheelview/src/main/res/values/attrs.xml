@@ -13,5 +13,6 @@
         <attr name="wheelview_dividerWidth" format="dimension"/>
         <attr name="wheelview_lineSpacingMultiplier" format="float"/>
         <attr name="wheelview_isOpen3D" format="boolean"/>
+        <attr name="wheelview_isEnMonth" format="boolean"/>
     </declare-styleable>
 </resources>

@@ -53,20 +53,22 @@
         android:background="@android:color/white"
         android:gravity="center"
         android:orientation="horizontal">
+        <com.contrarywind.view.WheelView
+            android:id="@+id/month"
+            android:layout_width="0dp"
+            app:wheelview_isOpen3D="false"
+            app:wheelview_isEnMonth="true"
+            android:layout_height="match_parent"
+            android:layout_weight="1.1" />
 
         <com.contrarywind.view.WheelView
-            app:wheelview_isOpen3D="false"
+
             android:id="@+id/year"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <com.contrarywind.view.WheelView
 
-            android:id="@+id/month"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.1" />
 
         <com.contrarywind.view.WheelView
             android:id="@+id/day"

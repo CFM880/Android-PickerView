@@ -126,6 +126,7 @@ public class WheelView extends View {
 
     //是否开启3D
     private boolean isOpen3D = true;
+    private boolean isEnMonth = false;
 
     public WheelView(Context context) {
         this(context, null);
@@ -159,11 +160,16 @@ public class WheelView extends View {
             textSize = a.getDimensionPixelOffset(R.styleable.pickerview_wheelview_textSize, textSize);
             lineSpacingMultiplier = a.getFloat(R.styleable.pickerview_wheelview_lineSpacingMultiplier, lineSpacingMultiplier);
             isOpen3D = a.getBoolean(R.styleable.pickerview_wheelview_isOpen3D, isOpen3D);
+            isEnMonth = a.getBoolean(R.styleable.pickerview_wheelview_isEnMonth, isEnMonth);
             a.recycle();//回收内存
         }
 
         judgeLineSpace();
         initLoopView(context);
+    }
+
+    public boolean isEnMonth() {
+        return isEnMonth;
     }
 
     /**

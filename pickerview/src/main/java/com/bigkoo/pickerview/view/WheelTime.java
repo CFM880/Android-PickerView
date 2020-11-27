@@ -4,10 +4,12 @@ import android.view.View;
 
 import com.bigkoo.pickerview.R;
 import com.bigkoo.pickerview.adapter.ArrayWheelAdapter;
+import com.bigkoo.pickerview.adapter.EnMonthWheelAdapter;
 import com.bigkoo.pickerview.adapter.NumericWheelAdapter;
 import com.bigkoo.pickerview.listener.ISelectTimeCallback;
 import com.bigkoo.pickerview.utils.ChinaDate;
 import com.bigkoo.pickerview.utils.LunarCalendar;
+import com.contrarywind.adapter.WheelAdapter;
 import com.contrarywind.listener.OnItemSelectedListener;
 import com.contrarywind.view.WheelView;
 
@@ -256,18 +258,18 @@ public class WheelTime {
         // 月
         wv_month = (WheelView) view.findViewById(R.id.month);
         if (startYear == endYear) {//开始年等于终止年
-            wv_month.setAdapter(new NumericWheelAdapter(startMonth, endMonth));
+            wv_month.setAdapter(getAdapter(wv_month, startMonth, endMonth));
             wv_month.setCurrentItem(month + 1 - startMonth);
         } else if (year == startYear) {
             //起始日期的月份控制
-            wv_month.setAdapter(new NumericWheelAdapter(startMonth, 12));
+            wv_month.setAdapter(getAdapter(wv_month, startMonth, 12));
             wv_month.setCurrentItem(month + 1 - startMonth);
         } else if (year == endYear) {
             //终止日期的月份控制
-            wv_month.setAdapter(new NumericWheelAdapter(1, endMonth));
+            wv_month.setAdapter(getAdapter(wv_month,1, endMonth));
             wv_month.setCurrentItem(month);
         } else {
-            wv_month.setAdapter(new NumericWheelAdapter(1, 12));
+            wv_month.setAdapter(getAdapter(wv_month,1, 12));
             wv_month.setCurrentItem(month);
         }
         wv_month.setGravity(gravity);
@@ -384,7 +386,7 @@ public class WheelTime {
                 // 判断大小月及是否闰年,用来确定"日"的数据
                 if (startYear == endYear) {
                     //重新设置月份
-                    wv_month.setAdapter(new NumericWheelAdapter(startMonth, endMonth));
+                    wv_month.setAdapter(getAdapter(wv_month, startMonth, endMonth));
 
                     if (currentMonthItem > wv_month.getAdapter().getItemsCount() - 1) {
                         currentMonthItem = wv_month.getAdapter().getItemsCount() - 1;
@@ -406,7 +408,7 @@ public class WheelTime {
                     }
                 } else if (year_num == startYear) {//等于开始的年
                     //重新设置月份
-                    wv_month.setAdapter(new NumericWheelAdapter(startMonth, 12));
+                    wv_month.setAdapter(getAdapter(wv_month, startMonth, 12));
 
                     if (currentMonthItem > wv_month.getAdapter().getItemsCount() - 1) {
                         currentMonthItem = wv_month.getAdapter().getItemsCount() - 1;
@@ -424,7 +426,7 @@ public class WheelTime {
 
                 } else if (year_num == endYear) {
                     //重新设置月份
-                    wv_month.setAdapter(new NumericWheelAdapter(1, endMonth));
+                    wv_month.setAdapter(getAdapter(wv_month, 1, endMonth));
                     if (currentMonthItem > wv_month.getAdapter().getItemsCount() - 1) {
                         currentMonthItem = wv_month.getAdapter().getItemsCount() - 1;
                         wv_month.setCurrentItem(currentMonthItem);
@@ -441,7 +443,7 @@ public class WheelTime {
 
                 } else {
                     //重新设置月份
-                    wv_month.setAdapter(new NumericWheelAdapter(1, 12));
+                    wv_month.setAdapter(getAdapter(wv_month, 1, 12));
                     //重新设置日
                     setReDay(year_num, wv_month.getCurrentItem() + 1, 1, 31, list_big, list_little);
                 }
@@ -896,5 +898,12 @@ public class WheelTime {
         wv_hours.setAlphaGradient(isAlphaGradient);
         wv_minutes.setAlphaGradient(isAlphaGradient);
         wv_seconds.setAlphaGradient(isAlphaGradient);
+    }
+
+    public WheelAdapter getAdapter(WheelView wheelView, int startDay, int endDay) {
+        if (wheelView.isEnMonth()) {
+            return new EnMonthWheelAdapter(startDay, endDay);
+        }
+        return new NumericWheelAdapter(startDay, endDay);
     }
 }
