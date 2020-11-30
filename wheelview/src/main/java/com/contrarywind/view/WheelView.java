@@ -738,7 +738,7 @@ public class WheelView extends View {
     }
 
     private String getFixNum(int timeNum) {
-        return timeNum >= 0 && timeNum < 10 ? TIME_NUM[timeNum] : String.valueOf(timeNum);
+        return String.valueOf(timeNum);
     }
 
     private void measuredCenterContentStart(String content) {
