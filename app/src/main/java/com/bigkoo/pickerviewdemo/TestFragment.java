@@ -17,6 +17,7 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.contrarywind.view.WheelView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -89,12 +90,11 @@ public class TestFragment extends Fragment implements View.OnClickListener {
                 .setType(new boolean[]{true, true, true, false, false, false})
                 .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
                 .setDividerColor(Color.DKGRAY)
-                .setDividerType(com.contrarywind.view.WheelView.DividerType.NONE)
+                .setDividerType(WheelView.DividerType.NONE)
                 .setContentTextSize(20)
                 .setDate(selectedDate)
                 .setRangDate(startDate, selectedDate)
                 .setDecorView(mFrameLayout)//非dialog模式下,设置ViewGroup, pickerView将会添加到这个ViewGroup中
-                .setOutSideColor(0x00000000)
                 .isAlphaGradient(true)
                 .setOutSideCancelable(false)
                 .build();

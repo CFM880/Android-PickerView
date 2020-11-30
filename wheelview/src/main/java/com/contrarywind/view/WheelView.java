@@ -383,6 +383,7 @@ public class WheelView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+
         if (adapter == null) {
             return;
         }
