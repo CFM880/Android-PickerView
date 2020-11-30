@@ -94,6 +94,7 @@ public class TestFragment extends Fragment implements View.OnClickListener {
                 .setRangDate(startDate, selectedDate)
                 .setDecorView(mFrameLayout)//非dialog模式下,设置ViewGroup, pickerView将会添加到这个ViewGroup中
                 .setOutSideColor(0x00000000)
+                .isAlphaGradient(true)
                 .setOutSideCancelable(false)
                 .build();
 

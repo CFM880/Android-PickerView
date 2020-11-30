@@ -607,40 +607,58 @@ public class WheelView extends View {
                 //计算开始绘制的位置
                 measuredCenterContentStart(contentText);
                 measuredOutContentStart(contentText);
-                if (translateY <= firstLineY && maxTextHeight + translateY >= firstLineY) {
-                    // 条目经过第一条线
-                    canvas.save();
-                    canvas.clipRect(0, 0, measuredWidth, firstLineY - translateY);
-                    canvas.drawText(contentText, drawOutContentStart, maxTextHeight, paintOuterText);
-                    canvas.restore();
-                    canvas.save();
-                    canvas.clipRect(0, firstLineY - translateY, measuredWidth, (int) (itemHeight));
-                    canvas.drawText(contentText, drawCenterContentStart, maxTextHeight, paintCenterText);
-                    canvas.restore();
-                } else if (translateY <= secondLineY && maxTextHeight + translateY >= secondLineY) {
-                    // 条目经过第二条线
-                    canvas.save();
-                    canvas.clipRect(0, 0, measuredWidth, secondLineY - translateY);
-                    canvas.drawText(contentText, drawCenterContentStart, maxTextHeight, paintCenterText);
-                    canvas.restore();
-                    canvas.save();
-                    canvas.clipRect(0, secondLineY - translateY, measuredWidth, (int) (itemHeight));
-                    canvas.drawText(contentText, drawOutContentStart, maxTextHeight, paintOuterText);
-                    canvas.restore();
-                } else if (translateY >= firstLineY && maxTextHeight + translateY <= secondLineY) {
-                    // 中间条目
-                    // canvas.clipRect(0, 0, measuredWidth, maxTextHeight);
-                    //让文字居中
-                    float Y = maxTextHeight;
-                    canvas.drawText(contentText, drawCenterContentStart, Y, paintCenterText);
+                // 弧长 L = itemHeight * counter - itemHeightOffset
+                // 求弧度 α = L / r  (弧长/半径) [0,π]
+                double radian = ((itemHeight * counter - itemHeightOffset)) / radius;
+                // 弧度转换成角度(把半圆以Y轴为轴心向右转90度，使其处于第一象限及第四象限
+                // angle [-90°,90°]
+                float angle = (float) (90D - (radian / Math.PI) * 180D);//item第一项,从90度开始，逐渐递减到 -90度
+                // 根据当前角度计算出偏差系数，用以在绘制时控制文字的 水平移动 透明度 倾斜程度.
+                float offsetCoefficient = (float) Math.pow(Math.abs(angle) / 90f, 2.2);
 
-                    //设置选中项
-                    selectedItem = preCurrentIndex - (itemsVisible / 2 - counter);
+
+                // 计算取值可能有细微偏差，保证负90°到90°以外的不绘制
+                if (angle > 90F || angle < -90F) {
+                    canvas.restore();
                 } else {
-                    canvas.drawText(contentText, drawOutContentStart, maxTextHeight, paintOuterText);
+                    if (translateY <= firstLineY && maxTextHeight + translateY >= firstLineY) {
+                        // 条目经过第一条线
+                        canvas.save();
+                        canvas.clipRect(0, 0, measuredWidth, firstLineY - translateY);
+                        canvas.drawText(contentText, drawOutContentStart, maxTextHeight, paintOuterText);
+                        canvas.restore();
+                        canvas.save();
+                        canvas.clipRect(0, firstLineY - translateY, measuredWidth, (int) (itemHeight));
+                        setOutPaintStyle(offsetCoefficient, angle);
+                        canvas.drawText(contentText, drawCenterContentStart, maxTextHeight, paintCenterText);
+                        canvas.restore();
+                    } else if (translateY <= secondLineY && maxTextHeight + translateY >= secondLineY) {
+                        // 条目经过第二条线
+                        canvas.save();
+                        canvas.clipRect(0, 0, measuredWidth, secondLineY - translateY);
+                        canvas.drawText(contentText, drawCenterContentStart, maxTextHeight, paintCenterText);
+                        canvas.restore();
+                        canvas.save();
+                        canvas.clipRect(0, secondLineY - translateY, measuredWidth, (int) (itemHeight));
+                        setOutPaintStyle(offsetCoefficient, angle);
+                        canvas.drawText(contentText, drawOutContentStart, maxTextHeight, paintOuterText);
+                        canvas.restore();
+                    } else if (translateY >= firstLineY && maxTextHeight + translateY <= secondLineY) {
+                        // 中间条目
+                        // canvas.clipRect(0, 0, measuredWidth, maxTextHeight);
+                        //让文字居中
+                        float Y = maxTextHeight;
+                        canvas.drawText(contentText, drawCenterContentStart, Y, paintCenterText);
+
+                        //设置选中项
+                        selectedItem = preCurrentIndex - (itemsVisible / 2 - counter);
+                    } else {
+                        setOutPaintStyle(offsetCoefficient, angle);
+                        canvas.drawText(contentText, drawOutContentStart, maxTextHeight, paintOuterText);
+                    }
+                    canvas.restore();
+                    paintCenterText.setTextSize(textSize);
                 }
-                canvas.restore();
-                paintCenterText.setTextSize(textSize);
                 counter++;
             }
         }
